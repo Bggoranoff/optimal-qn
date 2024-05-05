@@ -1,10 +1,8 @@
 import argparse
-import numpy as np
 
 from adaptivealgo import cli_main
+from adaptivealgo.agent import Agent
 from adaptivealgo.env import Environment
-
-"""Minimal theoretical fidelity of two-state entanglement generation"""
 
 def build_argument_parser():
     """
@@ -53,6 +51,27 @@ def build_argument_parser():
         help="Fixed parameter specifying exponential memory decay.",
     )
     return parser
+
+def eval_policy(env: Environment, agent: Agent):
+    """
+    Policy evaluation step
+    """
+
+    pass
+
+def improve_policy(env: Environment, agent: Agent):
+    """
+    Policy improvement step
+    """
+
+    pass
+
+def update_bellman(env: Environment, agent: Agent):
+    """
+    Update the value of a policy using the Bellman equation
+    """
+
+    pass
 
 def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float):
     """
