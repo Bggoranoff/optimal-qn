@@ -59,11 +59,11 @@ class Environment:
         
         for ttl in range(min_ttl, max_ttl + 1):
             new_state = cur_state + [ttl]
-            self._gen_substates(m_links + 1, ttl, max_ttl, new_state, states)
+            self._gen_substates(m_links + 1, ttl + 1, max_ttl, new_state, states)
         
         return states
 
-    def get_ttl(self, p_i: float):
+    def get_ttl(self, p_i: float) -> int:
         """
         Calculates the TTL of a link in memory with a certain fidelity using
         exponential decay model
@@ -72,7 +72,7 @@ class Environment:
         :returns int: TTL of link generated with probability `p_i`
         """
 
-        return np.floor(np.log((1 - self.alpha * p_i - F_MIN) / (self.f_thresh - F_MIN)) / self.gamma)
+        return int(np.floor(np.log((1 - self.alpha * p_i - F_MIN) / (self.f_thresh - F_MIN)) / self.gamma))
 
     def is_terminal(self, state: State):
         """
@@ -81,3 +81,17 @@ class Environment:
         """
 
         return len(state) == self.n_links
+    
+    def transition(self, state: State, action: float):
+        """
+        Returns the next possible states given the current state and action
+
+        :param State state: The current state
+        :param float action: The action taken
+        :returns State, State: The fail state and success state
+        """
+
+        fail_state = [ttl - 1 for ttl in state if ttl > 1]
+        succ_state = sorted(fail_state + [self.get_ttl(action)])
+        
+        return fail_state, succ_state
