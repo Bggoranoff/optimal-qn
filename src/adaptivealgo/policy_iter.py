@@ -1,4 +1,5 @@
 import argparse
+import numpy as np
 
 from adaptivealgo import cli_main
 from adaptivealgo.agent import Agent
@@ -50,6 +51,13 @@ def build_argument_parser():
         default="0.2",
         help="Fixed parameter specifying exponential memory decay.",
     )
+    parser.add_argument(
+        "--tol",
+        dest="tol",
+        type=float,
+        default="0.001",
+        help="Tolerance at which the policy is considered stable."
+    )
     return parser
 
 def eval_policy(env: Environment, agent: Agent):
@@ -59,12 +67,12 @@ def eval_policy(env: Environment, agent: Agent):
 
     pass
 
-def improve_policy(env: Environment, agent: Agent):
+def improve_policy(env: Environment, agent: Agent) -> bool:
     """
     Policy improvement step
     """
 
-    pass
+    return True
 
 def update_bellman(env: Environment, agent: Agent):
     """
@@ -73,7 +81,7 @@ def update_bellman(env: Environment, agent: Agent):
 
     pass
 
-def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float):
+def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float, tol: float):
     """
     Perform policy iteration given the command-line arguments
 
@@ -86,11 +94,17 @@ def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float)
 
     ps = [float(p) for p in actions.replace(" ", "").split(",")]
     env = Environment(n_links, ps, f_thresh, alpha, gamma)
+    agent = Agent(n_links=n_links, n_actions=len(ps), max_ttl=env.get_ttl(np.min(env.actions)))
 
-    print(env.ps)
-    print(env.fs)
+    policy_stable = False
+    i = 0
 
-    pass
+    while not policy_stable:
+        i += 1
+        eval_policy(env, agent)
+        policy_stable = improve_policy(env, agent)
+
+    print(f"Policy iteration converged after {i} steps")
 
 def main():
     cli_main(build_argument_parser, run)
