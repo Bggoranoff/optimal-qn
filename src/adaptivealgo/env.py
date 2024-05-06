@@ -1,6 +1,8 @@
+from typing import List
 import numpy as np
 
 from adaptivealgo.constants import F_MIN
+from adaptivealgo.state import State
 
 class Environment:
     def __init__(self, n_links: int, ps: list[float], f_thresh: float, alpha: float, gamma: float):
@@ -19,6 +21,47 @@ class Environment:
         self.gamma = gamma
         self.alpha = alpha
         self.actions = ps
+        self.states = self.gen_states(n_links, self.get_ttl(np.min(ps)))
+    
+    def gen_states(self, n_links: int, max_ttl: int) -> List[State]:
+        """
+        Generates all possible states in the MDP
+
+        :param int n_links: The number of links required in the near-term network
+        :param int max_ttl: The maximum TTL of a link in memory
+        :returns List[State]: The list of states
+        """
+
+        states = []
+        for m_links in range(n_links + 1):
+            sub_states = self._gen_substates(m_links, 1, max_ttl, [], [])
+            states.extend(sub_states)
+        
+        return states
+    
+    def _gen_substates(self, m_links: int, min_ttl: int, max_ttl: int, cur_state: State, states: list[State]):
+        """
+        Generates all possible substates in the MDP
+
+        :param int m_links: The number of links in the current state
+        :param int max_ttl: The maximum TTL of a link in memory
+        :param State cur_state: The current state
+        :param list[State] states: The list of states
+        :returns list[State]: The list of states
+        """
+
+        if len(cur_state) == m_links:
+            states.append(cur_state)
+            return states
+
+        if min_ttl >= max_ttl:
+            return states
+        
+        for ttl in range(min_ttl, max_ttl + 1):
+            new_state = cur_state + [ttl]
+            self._gen_substates(m_links + 1, ttl, max_ttl, new_state, states)
+        
+        return states
 
     def get_ttl(self, p_i: float):
         """
@@ -31,7 +74,7 @@ class Environment:
 
         return np.floor(np.log((1 - self.alpha * p_i - F_MIN) / (self.f_thresh - F_MIN)) / self.gamma)
 
-    def is_terminal(self, state: list[int]):
+    def is_terminal(self, state: State):
         """
         Checks whether a state is a terminal state, meaning that all links
         have been generated in memory
