@@ -1,5 +1,4 @@
 import argparse
-from typing import List
 import numpy as np
 
 from adaptivealgo import cli_main
@@ -57,7 +56,7 @@ def build_argument_parser():
         "--tol",
         dest="tol",
         type=float,
-        default="0.001",
+        default="1e-1",
         help="Tolerance at which the policy is considered stable."
     )
     return parser
@@ -77,7 +76,7 @@ def eval_policy(env: Environment, agent: Agent, tol: float):
         for s_idx in range(agent.n_states):
             old_value = agent.get_value(env.states[s_idx])
             update_bellman(env, agent, s_idx)
-            delta = np.abs(agent.get_value(env.states[s_idx]) - old_value)
+            delta = max(delta, np.abs(agent.get_value(env.states[s_idx]) - old_value))
 
 def update_policy(env: Environment, agent: Agent, s_idx: int):
     """
