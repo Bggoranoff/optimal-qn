@@ -170,7 +170,7 @@ def print_policy(agent: Agent, env: Environment):
     for state in env.states:
         if env.is_terminal(state):
             continue
-        
+
         print(f"State {state}: {agent.get_policy(state)}")
 
 def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float, tol: float):

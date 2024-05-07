@@ -3,6 +3,7 @@ import numpy as np
 
 from adaptivealgo.constants import F_MIN
 from adaptivealgo.state import State
+from adaptivealgo.util import get_ttl
 
 class Environment:
     def __init__(self, n_links: int, ps: list[float], f_thresh: float, alpha: float, gamma: float):
@@ -72,7 +73,7 @@ class Environment:
         :returns int: TTL of link generated with probability `p_i`
         """
 
-        return int(np.floor(np.log((1 - self.alpha * p_i - F_MIN) / (self.f_thresh - F_MIN)) / self.gamma))
+        return get_ttl(p_i, self.alpha, self.f_thresh, self.gamma)
 
     def is_terminal(self, state: State):
         """
