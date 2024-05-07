@@ -59,7 +59,7 @@ class Environment:
         
         for ttl in range(min_ttl, max_ttl + 1):
             new_state = cur_state + [ttl]
-            self._gen_substates(m_links + 1, ttl + 1, max_ttl, new_state, states)
+            self._gen_substates(m_links, ttl, max_ttl, new_state, states)
         
         return states
 
