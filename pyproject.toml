@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "adaptivealgo", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 matplotlib = "^3.8.4"
 numpy = "^1.26.4"
 argparse = "^1.4.0"

@@ -1,0 +1,12 @@
+image: python:latest
+
+stages:
+  - install
+  - test
+
+test:
+  stage: test
+  script:
+    - pip install poetry
+    - poetry install
+    - poetry run pytest
