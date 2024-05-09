@@ -17,20 +17,24 @@ class Environment:
         self.n_links = n_links
         self.f_thresh = f_thresh
         self.gamma = gamma
-        self.ps = ps
-        self.fs = [1 - alpha * p_i for p_i in self.ps]
-        self.ttls = [self.get_ttl(f_i) for f_i in self.fs]
-        self.max_ttl = np.max(self.ttls)
+        self.alpha = alpha
+        self.actions = ps
 
-    def get_ttl(self, f_i: float):
+    def get_ttl(self, p_i: float):
         """
         Calculates the TTL of a link in memory with a certain fidelity using
         exponential decay model
 
-        :param float f_i: The initial fidelity of the link
-        :param float f_thresh: The minimum fidelity threshold
-        :param float gamma: The memory decay rate constant
-        :returns int: TTL of link with initial fidelity `f_i`
+        :param float p_i: The success probability of entanglement generation 
+        :returns int: TTL of link generated with probability `p_i`
         """
 
-        return np.floor(np.log((f_i - F_MIN) / (self.f_thresh - F_MIN)) / self.gamma)
+        return np.floor(np.log((1 - self.alpha * p_i - F_MIN) / (self.f_thresh - F_MIN)) / self.gamma)
+
+    def is_terminal(self, state: list[int]):
+        """
+        Checks whether a state is a terminal state, meaning that all links
+        have been generated in memory
+        """
+
+        return len(state) == self.n_links
