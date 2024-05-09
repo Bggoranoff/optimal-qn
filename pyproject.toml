@@ -19,3 +19,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 policyIter = "adaptivealgo.policy_iter:main"
+solveBasic = "adaptivealgo.solve_basic:main"
