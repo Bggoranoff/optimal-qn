@@ -56,7 +56,7 @@ def build_argument_parser():
         "--tol",
         dest="tol",
         type=float,
-        default="1e-1",
+        default="1e-20",
         help="Tolerance at which the policy is considered stable."
     )
     return parser
@@ -70,10 +70,14 @@ def eval_policy(env: Environment, agent: Agent, tol: float):
     :param float tol: The tolerance at which the policy is considered stable
     """
 
-    delta = tol + 1
+    delta = np.inf
 
     while delta >= tol:
+        delta = -np.inf
         for s_idx in range(agent.n_states):
+            if env.is_terminal(env.states[s_idx]):
+                continue
+
             old_value = agent.get_value(env.states[s_idx])
             update_bellman(env, agent, s_idx)
             delta = max(delta, np.abs(agent.get_value(env.states[s_idx]) - old_value))
