@@ -1,9 +1,11 @@
 import argparse
+from typing import List
 import numpy as np
 
 from adaptivealgo import cli_main
 from adaptivealgo.agent import Agent
 from adaptivealgo.env import Environment
+from adaptivealgo.state import State
 
 def build_argument_parser():
     """
@@ -60,12 +62,16 @@ def build_argument_parser():
     )
     return parser
 
-def eval_policy(env: Environment, agent: Agent):
+def eval_policy(env: Environment, agent: Agent, tol: float):
     """
     Policy evaluation step
     """
 
-    pass
+    delta = tol + 1
+
+    while delta >= tol:
+        for s_idx in range(agent.n_states):
+            pass 
 
 def improve_policy(env: Environment, agent: Agent) -> bool:
     """
@@ -101,7 +107,7 @@ def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float,
 
     while not policy_stable:
         i += 1
-        eval_policy(env, agent)
+        eval_policy(env, agent, tol)
         policy_stable = improve_policy(env, agent)
 
     print(f"Policy iteration converged after {i} steps")
