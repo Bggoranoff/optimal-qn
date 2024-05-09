@@ -115,6 +115,9 @@ def improve_policy(env: Environment, agent: Agent) -> bool:
     policy_stable = True
 
     for s_idx in range(agent.n_states):
+        if env.is_terminal(env.states[s_idx]):
+            continue
+
         old_policy = agent.get_policy(env.states[s_idx])
         update_policy(env, agent, s_idx)
         new_policy = agent.get_policy(env.states[s_idx])
@@ -165,6 +168,9 @@ def print_policy(agent: Agent, env: Environment):
 
     print("Final policy:")
     for state in env.states:
+        if env.is_terminal(state):
+            continue
+        
         print(f"State {state}: {agent.get_policy(state)}")
 
 def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float, tol: float):
