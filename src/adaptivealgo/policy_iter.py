@@ -2,8 +2,8 @@ import argparse
 import numpy as np
 
 from adaptivealgo import cli_main
+from adaptivealgo.env import Environment
 
-F_MIN = 0.25
 """Minimal theoretical fidelity of two-state entanglement generation"""
 
 def build_argument_parser():
@@ -54,19 +54,6 @@ def build_argument_parser():
     )
     return parser
 
-def get_ttl(f_i: float, f_thresh: float, gamma: float):
-    """
-    Calculates the TTL of a link in memory with a certain fidelity using
-    exponential decay model
-
-    :param float f_i: The initial fidelity of the link
-    :param float f_thresh: The minimum fidelity threshold
-    :param float gamma: The memory decay rate constant
-    :returns int: TTL of link with initial fidelity `f_i`
-    """
-
-    return np.floor(np.log((f_i - F_MIN) / (f_thresh - F_MIN)) / gamma)
-
 def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float):
     """
     Perform policy iteration given the command-line arguments
@@ -79,15 +66,10 @@ def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float)
     """
 
     ps = [float(p) for p in actions.replace(" ", "").split(",")]
-    fs = [1 - alpha * p_i for p_i in ps]
-    ttls = [get_ttl(f_i, f_thresh, gamma) for f_i in fs]
-    max_ttl = np.max(ttls)
+    env = Environment(n_links, ps, f_thresh, alpha, gamma)
 
-    print(f"Performing policy iteration for {n_links} links")
-    print(ps)
-    print(fs)
-    print(ttls)
-    print(max_ttl)
+    print(env.ps)
+    print(env.fs)
 
     pass
 
