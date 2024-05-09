@@ -1,8 +1,8 @@
-import math
+from typing import List
 import numpy as np
 
 class Agent:
-    def __init__(self, n_links: int, n_actions: int, max_ttl: int):
+    def __init__(self, n_states: int, n_actions: int):
         """
         Agent stores all the information about the current policy
 
@@ -10,28 +10,58 @@ class Agent:
         """
 
         self.cur_value = 0
-        self.n_states = self.calc_num_states(n_links, max_ttl)
+        self.n_states = n_states
         self.n_actions = n_actions
 
-        self.policy = self.gen_init_policy()
-
-    def calc_num_states(self, n_links: int, max_ttl: int) -> int:
+        self.policy = {}
+        self.value = {}
+    
+    def get_value(self, state: List[int]) -> float:
         """
-        Given a number of links that need to be generated and the maximum
-        possible TTL of a link, calculate the number of states in the MDP
+        Get the value of the state
 
-        :param int n_links: Required number of links in the network
-        :param int max_ttl: Maximum possible TTL of a generated link
-        :returns int: Number of states in the MDP
-        """
-
-        return math.factorial(max_ttl + n_links) // (math.factorial(max_ttl) * math.factorial(n_links))
-
-    def gen_init_policy(self):
-        """
-        Generate equiprobable policy for each state in the MDP
-
-        :returns list[list[float]]: List of probabilities for each state
+        :param int state: The state whose value is to be returned
+        :returns float: The value of the state
         """
 
-        return (1 / self.n_actions) * np.ones((self.n_states, self.n_actions))
+        key = str(state)
+        if key not in self.value:
+            self.value[key] = 0
+        
+        return self.value[key]
+    
+    def set_value(self, state: List[int], value: float):
+        """
+        Set the value of the state
+
+        :param int state: The state whose value is to be set
+        :param float value: The value to set
+        """
+
+        key = str(state)
+        self.value[key] = value
+    
+    def get_policy(self, state: List[int]) -> List[float]:
+        """
+        Get the policy for the state
+
+        :param int state: The state whose policy is to be returned
+        :returns list[float]: The policy for the state
+        """
+
+        key = str(state)
+        if key not in self.policy:
+            self.policy[key] = (1 / self.n_actions) * np.ones(self.n_actions)
+        
+        return self.policy[key]
+
+    def set_policy(self, state: List[int], policy: List[float]):
+        """
+        Set the policy for the state
+
+        :param int state: The state whose policy is to be set
+        :param list[float] policy: The policy to set
+        """
+
+        key = str(state)
+        self.policy[key] = policy
