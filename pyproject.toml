@@ -1,9 +1,10 @@
 [tool.poetry]
-name = "optimalnearterm"
+name = "adaptivealgo"
 version = "0.1.0"
 description = ""
 authors = ["Boris Goranov <b.g.goranov@student.tudelft.nl>"]
 readme = "README.md"
+packages = [{include = "adaptivealgo", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -15,3 +16,6 @@ argparse = "^1.4.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+policyIter = "adaptivealgo.policy_iter:main"
