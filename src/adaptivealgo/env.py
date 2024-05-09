@@ -55,7 +55,7 @@ class Environment:
             states.append(cur_state)
             return states
 
-        if min_ttl >= max_ttl:
+        if min_ttl > max_ttl:
             return states
         
         for ttl in range(min_ttl, max_ttl + 1):

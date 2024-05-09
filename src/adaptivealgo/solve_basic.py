@@ -57,6 +57,13 @@ def calc_expected_time(first_p: float, second_p: float, ttl: float) -> float:
     :return: The value of the policy
     """
 
+    assert 0 <= first_p <= 1, f"first_p={first_p}"
+    assert 0 <= second_p <= 1, f"second_p={second_p}"
+    assert ttl >= 1, f"ttl={ttl}"
+
+    if first_p == 0 or second_p == 0 or ttl == 1:
+        return np.inf
+
     return (1 / first_p) + (1 / (second_p * (1 - (1 - second_p) ** (ttl - 1))))
 
 def build_policy(max_ttl: int, expected_times: list[float]) -> dict:

@@ -51,7 +51,7 @@ class Agent:
 
         key = str(state)
         if key not in self.policy:
-            self.policy[key] = (1 / self.n_actions) * np.ones(self.n_actions)
+            self.policy[key] = [1 / self.n_actions] * self.n_actions
         
         return self.policy[key]
 
