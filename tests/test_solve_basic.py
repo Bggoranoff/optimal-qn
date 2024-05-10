@@ -1,5 +1,5 @@
 import numpy as np
-from adaptivealgo.solve_basic import build_policy, calc_expected_time
+from adaptivealgo.cli.solve_basic import build_policy, calc_expected_time
 
 def test_calc_expected_time():
     expected = calc_expected_time(0.1, 0.2, 5)

@@ -3,10 +3,10 @@ import json
 import numpy as np
 import time
 
-from adaptivealgo import cli_main
-from adaptivealgo.agent import Agent
-from adaptivealgo.env import Environment
-from adaptivealgo.state import State
+from adaptivealgo.cli import cli_main
+from adaptivealgo.lib.agent import Agent
+from adaptivealgo.lib.env import Environment
+from adaptivealgo.lib.state import State
 
 def build_argument_parser():
     """

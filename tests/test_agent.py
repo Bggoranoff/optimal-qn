@@ -1,4 +1,4 @@
-from adaptivealgo.agent import Agent
+from adaptivealgo.lib.agent import Agent
 
 def test_get_value_no_value():
     agent = Agent(2, 2)

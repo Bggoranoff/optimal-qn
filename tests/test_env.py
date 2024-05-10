@@ -1,4 +1,4 @@
-from adaptivealgo.env import Environment
+from adaptivealgo.lib.env import Environment
 import math
 
 def test_get_states():

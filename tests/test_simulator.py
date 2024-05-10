@@ -1,5 +1,4 @@
-from adaptivealgo.util import get_ttl
-from src.adaptivealgo.simulator import Simulator
+from src.adaptivealgo.lib.simulator import Simulator
 
 policy = {
     "[]": [1.0, 0],

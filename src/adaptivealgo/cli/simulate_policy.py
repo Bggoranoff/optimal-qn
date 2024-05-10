@@ -1,8 +1,8 @@
 from argparse import ArgumentParser
 import json
 
-from adaptivealgo import cli_main
-from adaptivealgo.simulator import Simulator
+from adaptivealgo.cli import cli_main
+from adaptivealgo.lib.simulator import Simulator
 
 
 def build_argument_parser():

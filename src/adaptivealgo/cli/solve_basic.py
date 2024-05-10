@@ -1,10 +1,9 @@
 from argparse import ArgumentParser
-from typing import List
 
 import numpy as np
 
-from adaptivealgo import cli_main
-from adaptivealgo.util import get_ttl
+from adaptivealgo.cli import cli_main
+from adaptivealgo.lib.util import get_ttl
 
 def build_argument_parser() -> ArgumentParser:
     """
