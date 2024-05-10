@@ -1,5 +1,6 @@
 import argparse
 import json
+from typing import List
 import numpy as np
 import time
 
@@ -185,13 +186,13 @@ def print_policy(agent: Agent, env: Environment):
 
         print(f"State {state}: {agent.get_policy(state)}")
 
-def save_policy_json(agent: Agent, env: Environment, filename: str):
+def build_policy_dict(agent: Agent, env: Environment) -> dict:
     """
-    Save the policy of the agent to a JSON file
+    Build a dictionary representation of the policy
 
     :param Agent agent: The agent object
     :param Environment env: The environment object
-    :param str filename: The name of the file
+    :returns dict: The policy dictionary
     """
 
     policy = {}
@@ -201,7 +202,22 @@ def save_policy_json(agent: Agent, env: Environment, filename: str):
 
         policy[str(state)] = int(np.argmax(agent.get_policy(state)))
     
-    program_state = {
+    return policy
+
+def find_policy(n_links: int, f_thresh: float, ps: List[float], alpha: float, gamma: float, tol: float) -> dict:
+    env = Environment(n_links, ps, f_thresh, alpha, gamma)
+    agent = Agent(n_states=len(env.states), n_actions=len(ps))
+
+    policy_stable = False
+    i = 0
+
+    while not policy_stable:
+        i += 1
+        eval_policy(env, agent, tol)
+        policy_stable = improve_policy(env, agent)
+
+    policy = build_policy_dict(agent, env)
+    result = {
         "n_links": env.n_links,
         "f_thresh": env.f_thresh,
         "actions": env.actions,
@@ -209,9 +225,7 @@ def save_policy_json(agent: Agent, env: Environment, filename: str):
         "gamma": env.gamma,
         "policy": policy,
     }
-
-    with open(filename, "w") as f:
-        json.dump(program_state, f)
+    return result, i
 
 def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float, tol: float, output_path: str):
     """
@@ -224,23 +238,16 @@ def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float,
     :param float gamma: Exponential memory decay constant
     """
 
-    start_time = time.process_time()
-
     ps = [float(p) for p in actions.replace(" ", "").split(",")]
-    env = Environment(n_links, ps, f_thresh, alpha, gamma)
-    agent = Agent(n_states=len(env.states), n_actions=len(ps))
 
-    policy_stable = False
-    i = 0
-
-    while not policy_stable:
-        i += 1
-        eval_policy(env, agent, tol)
-        policy_stable = improve_policy(env, agent)
-
+    start_time = time.process_time()
+    policy, i = find_policy(n_links, f_thresh, ps, alpha, gamma, tol)
     end_time = time.process_time()
+
     print(f"Policy iteration converged after {i} steps for {end_time - start_time} seconds")
-    save_policy_json(agent, env, output_path)
+    if output_path:
+        with open(output_path, "w") as file:
+            json.dump(policy, file)
 
 def main():
     cli_main(build_argument_parser, run)

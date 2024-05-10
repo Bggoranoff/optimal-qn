@@ -1,5 +1,8 @@
 from argparse import ArgumentParser
 import json
+from typing import List
+
+import numpy as np
 
 from adaptivealgo.cli import cli_main
 from adaptivealgo.lib.simulator import Simulator
@@ -45,6 +48,21 @@ def import_json(input_path: str) -> dict:
     with open(input_path, "r") as file:
         return json.load(file)
 
+def gen_policy_samples(sim: Simulator, iters: int) -> List[int]:
+    """
+    Generate samples of the policy
+
+    :param Simulator sim: The simulator
+    :param int iters: The number of iterations
+    :returns List[int]: The samples
+    """
+
+    samples = []
+    for _ in range(iters):
+        samples.append(sim.run())
+    
+    return samples
+
 def simulate_policy(policy: dict, n_links: int, actions: list[float], f_thresh: float, alpha: float, gamma: float, iters: int) -> int:
     """
     Simulate the policy
@@ -58,12 +76,9 @@ def simulate_policy(policy: dict, n_links: int, actions: list[float], f_thresh: 
     """
 
     sim = Simulator(policy, n_links, f_thresh, actions, alpha, gamma)
-    result = 0
 
-    for _ in range(iters):
-        result += sim.run()
-    
-    return result // iters
+    samples = gen_policy_samples(sim, iters)
+    return int(np.mean(samples))
 
 def run(input_path: str, iterations: int):
     """
