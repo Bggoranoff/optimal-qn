@@ -1,10 +1,13 @@
 import argparse
+import json
+from typing import List
 import numpy as np
+import time
 
-from adaptivealgo import cli_main
-from adaptivealgo.agent import Agent
-from adaptivealgo.env import Environment
-from adaptivealgo.state import State
+from adaptivealgo.cli import cli_main
+from adaptivealgo.lib.agent import Agent
+from adaptivealgo.lib.env import Environment
+from adaptivealgo.lib.state import State
 
 def build_argument_parser():
     """
@@ -57,7 +60,14 @@ def build_argument_parser():
         dest="tol",
         type=float,
         default="1e-20",
-        help="Tolerance at which the policy is considered stable."
+        help="Tolerance at which the policy is considered stable.",
+    )
+    parser.add_argument(
+        "--output",
+        dest="output_path",
+        type=str,
+        default="./policy.json",
+        help="Path to save the policy.",
     )
     return parser
 
@@ -102,7 +112,7 @@ def update_policy(env: Environment, agent: Agent, s_idx: int):
         best_action = a_idx if value > best_value else best_action
         best_value = value if value > best_value else best_value
 
-    new_policy = np.zeros(agent.n_actions)
+    new_policy = [0 for _ in range(agent.n_actions)]
     new_policy[best_action] = 1
     agent.set_policy(state, new_policy)
 
@@ -176,18 +186,25 @@ def print_policy(agent: Agent, env: Environment):
 
         print(f"State {state}: {agent.get_policy(state)}")
 
-def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float, tol: float):
+def build_policy_dict(agent: Agent, env: Environment) -> dict:
     """
-    Perform policy iteration given the command-line arguments
+    Build a dictionary representation of the policy
 
-    :param int n_links: Target required number of links in the network
-    :param float f_thresh: Minimum fidelity threshold
-    :param str actions: Comma-separated list of probabilities
-    :param float alpha: Specifies relationship between probablity and fidelity
-    :param float gamma: Exponential memory decay constant
+    :param Agent agent: The agent object
+    :param Environment env: The environment object
+    :returns dict: The policy dictionary
     """
 
-    ps = [float(p) for p in actions.replace(" ", "").split(",")]
+    policy = {}
+    for state in env.states:
+        if env.is_terminal(state):
+            continue
+
+        policy[str(state)] = int(np.argmax(agent.get_policy(state)))
+    
+    return policy
+
+def find_policy(n_links: int, f_thresh: float, ps: List[float], alpha: float, gamma: float, tol: float) -> dict:
     env = Environment(n_links, ps, f_thresh, alpha, gamma)
     agent = Agent(n_states=len(env.states), n_actions=len(ps))
 
@@ -199,8 +216,38 @@ def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float,
         eval_policy(env, agent, tol)
         policy_stable = improve_policy(env, agent)
 
-    print(f"Policy iteration converged after {i} steps")
-    print_policy(agent, env)
+    policy = build_policy_dict(agent, env)
+    result = {
+        "n_links": env.n_links,
+        "f_thresh": env.f_thresh,
+        "actions": env.actions,
+        "alpha": env.alpha,
+        "gamma": env.gamma,
+        "policy": policy,
+    }
+    return result, i
+
+def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float, tol: float, output_path: str):
+    """
+    Perform policy iteration given the command-line arguments
+
+    :param int n_links: Target required number of links in the network
+    :param float f_thresh: Minimum fidelity threshold
+    :param str actions: Comma-separated list of probabilities
+    :param float alpha: Specifies relationship between probablity and fidelity
+    :param float gamma: Exponential memory decay constant
+    """
+
+    ps = [float(p) for p in actions.replace(" ", "").split(",")]
+
+    start_time = time.process_time()
+    policy, i = find_policy(n_links, f_thresh, ps, alpha, gamma, tol)
+    end_time = time.process_time()
+
+    print(f"Policy iteration converged after {i} steps for {end_time - start_time} seconds")
+    if output_path:
+        with open(output_path, "w") as file:
+            json.dump(policy, file)
 
 def main():
     cli_main(build_argument_parser, run)

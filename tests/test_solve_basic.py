@@ -1,5 +1,5 @@
 import numpy as np
-from adaptivealgo.solve_basic import build_policy, calc_expected_time
+from adaptivealgo.cli.solve_basic import build_policy, calc_expected_time
 
 def test_calc_expected_time():
     expected = calc_expected_time(0.1, 0.2, 5)
@@ -18,7 +18,7 @@ def test_calc_expected_time_ttl_one():
     assert expected == np.inf
 
 def test_build_policy():
-    expected = build_policy(5, [5.47, 13.11])
+    expected = build_policy(5, 5.47, 13.11)
     assert expected == {
         "[]": [1.0, 0],
         "[1]": [0, 1.0],

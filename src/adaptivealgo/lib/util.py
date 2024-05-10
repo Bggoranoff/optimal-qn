@@ -1,4 +1,4 @@
-from adaptivealgo.constants import F_MIN
+from adaptivealgo.lib.constants import F_MIN
 
 import numpy as np
 

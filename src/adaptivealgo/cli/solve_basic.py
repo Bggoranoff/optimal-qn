@@ -1,10 +1,9 @@
 from argparse import ArgumentParser
-from typing import List
 
 import numpy as np
 
-from adaptivealgo import cli_main
-from adaptivealgo.util import get_ttl
+from adaptivealgo.cli import cli_main
+from adaptivealgo.lib.util import get_ttl
 
 def build_argument_parser() -> ArgumentParser:
     """
@@ -16,7 +15,7 @@ def build_argument_parser() -> ArgumentParser:
     parser = ArgumentParser(
         description="""
         solve_basic: solves the optimal resource generation policy problem for
-        a near-term quantum network with 2 required links.
+        a near-term quantum network with 2 required links with protocols p1 < p2.
         """
     )
     
@@ -27,10 +26,16 @@ def build_argument_parser() -> ArgumentParser:
         help="Minimum fidelity threshold.",
     )
     parser.add_argument(
-        "--actions",
-        dest="actions",
-        type=str,
-        help="Comma-separated list of probabilities.",
+        "--p1",
+        dest="p_1",
+        type=float,
+        help="Smaller probability of the two actions.",
+    )
+    parser.add_argument(
+        "--p2",
+        dest="p_2",
+        type=float,
+        help="Larger probability of the two actions.",
     )
     parser.add_argument(
         "--alpha",
@@ -66,21 +71,22 @@ def calc_expected_time(first_p: float, second_p: float, ttl: float) -> float:
 
     return (1 / first_p) + (1 / (second_p * (1 - (1 - second_p) ** (ttl - 1))))
 
-def build_policy(max_ttl: int, expected_times: list[float]) -> dict:
+def build_policy(max_ttl: int, et_12: float, et_22: float) -> dict:
     """
     Build the policy for a given state
 
     :param int max_ttl: The maximum time-to-live of the link
-    :param list[float] expected_times: The expected times for each action
+    :param float et_12: The expected time for the first policy
+    :param float et_22: The expected time for the second policy
     :return: The policy for the state
     """
 
     result = {
-        "[]": [1.0, 0] if expected_times[0] < expected_times[1] else [0, 1.0],
+        "[]": [1.0, 0] if et_12 < et_22 else [0, 1.0],
     }
 
     for t in range(1, max_ttl + 1):
-        result[f"[{t}]"] = [0, 1.0] if expected_times[0] < expected_times[1] else [1.0, 0]
+        result[f"[{t}]"] = [0, 1.0]
     
     return result
 
@@ -95,27 +101,26 @@ def print_policy(policy: dict):
     for state in policy:
         print(f"State {state}: {policy[state]}")
 
-def run(f_thresh: float, actions: str, alpha: float, gamma: float):
+def run(f_thresh: float, p_1: float, p_2: float, alpha: float, gamma: float):
     """
     Solve the optimal policy problem for s=2 required links in memory
 
     :param float f_thresh: The minimum fidelity threshold
-    :param str actions: The list of probabilities
+    :param float p_1: The smaller probability of the two actions
+    :param float p_2: The larger probability of the two actions
     :param float alpha: The relationship between probability and fidelity
     :param float gamma: The memory decay constant
     """
+    
+    assert p_1 < p_2, f"p_1={p_1} >= p_2={p_2}"
+    
+    t_1 = get_ttl(p_1, alpha, f_thresh, gamma)
+    t_2 = get_ttl(p_2, alpha, f_thresh, gamma)
 
-    ps = [float(p) for p in actions.replace(" ", "").split(",")]
-    assert len(ps) == 2, "Only two actions are supported"
+    et_12 = calc_expected_time(p_1, p_2, t_1)
+    et_22 = calc_expected_time(p_2, p_2, t_2)
 
-    ts = [get_ttl(p, alpha, f_thresh, gamma) for p in ps]
-
-    expected_times = [
-        calc_expected_time(ps[0], ps[1], ts[0]),
-        calc_expected_time(ps[1], ps[0], ts[1]),
-    ]
-
-    final_policy = build_policy(np.max(ts), expected_times)
+    final_policy = build_policy(t_1, et_12, et_22)
     print_policy(final_policy)
 
 def main():

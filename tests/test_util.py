@@ -1,6 +1,6 @@
 import numpy as np
-from adaptivealgo.constants import F_MIN
-from adaptivealgo.util import get_ttl
+from adaptivealgo.lib.constants import F_MIN
+from adaptivealgo.lib.util import get_ttl
 
 
 def test_get_ttl():

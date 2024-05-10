@@ -1,5 +1,4 @@
 from typing import List
-import numpy as np
 
 class Agent:
     def __init__(self, n_states: int, n_actions: int):

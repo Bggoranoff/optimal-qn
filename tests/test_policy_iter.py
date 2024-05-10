@@ -1,6 +1,6 @@
-from adaptivealgo.policy_iter import calc_value, update_bellman
-from adaptivealgo.env import Environment
-from adaptivealgo.agent import Agent
+from adaptivealgo.cli.policy_iter import calc_value, update_bellman
+from adaptivealgo.lib.env import Environment
+from adaptivealgo.lib.agent import Agent
 
 def test_calc_value():
     env = Environment(n_links=2, ps=[0.1, 0.2], f_thresh=0.5, alpha=0.1, gamma=0.1)

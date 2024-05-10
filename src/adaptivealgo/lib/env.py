@@ -1,9 +1,9 @@
 from typing import List
 import numpy as np
 
-from adaptivealgo.constants import F_MIN
-from adaptivealgo.state import State
-from adaptivealgo.util import get_ttl
+from adaptivealgo.lib.constants import F_MIN
+from adaptivealgo.lib.state import State
+from adaptivealgo.lib.util import get_ttl
 
 class Environment:
     def __init__(self, n_links: int, ps: list[float], f_thresh: float, alpha: float, gamma: float):
