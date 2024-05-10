@@ -23,7 +23,7 @@ def build_argument_parser():
         "--links",
         dest="n_links",
         type=int,
-        default="4",
+        default="2",
         help="Number of required links in the network.",
     )
     parser.add_argument(
@@ -37,7 +37,7 @@ def build_argument_parser():
         "--actions",
         dest="actions",
         type=str,
-        default="0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5",
+        default="0.3, 0.5",
         help="Comma-separated list of protocol probabilities of success (e.g. 0.25, 0.5, 0.75).",
     )
     parser.add_argument(
