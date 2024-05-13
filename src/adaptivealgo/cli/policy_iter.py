@@ -204,7 +204,7 @@ def build_policy_dict(agent: Agent, env: Environment) -> dict:
     
     return policy
 
-def find_policy(n_links: int, f_thresh: float, ps: List[float], alpha: float, gamma: float, tol: float) -> dict:
+def find_policy(n_links: int, f_thresh: float, ps: List[float], alpha: float, gamma: float, tol: float, to_print: bool=False) -> dict:
     env = Environment(n_links, ps, f_thresh, alpha, gamma)
     agent = Agent(n_states=len(env.states), n_actions=len(ps))
 
@@ -225,6 +225,10 @@ def find_policy(n_links: int, f_thresh: float, ps: List[float], alpha: float, ga
         "gamma": env.gamma,
         "policy": policy,
     }
+
+    if to_print:
+        print_policy(agent, env)
+
     return result, i
 
 def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float, tol: float, output_path: str):
@@ -241,7 +245,7 @@ def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float,
     ps = [float(p) for p in actions.replace(" ", "").split(",")]
 
     start_time = time.process_time()
-    policy, i = find_policy(n_links, f_thresh, ps, alpha, gamma, tol)
+    policy, i = find_policy(n_links, f_thresh, ps, alpha, gamma, tol, to_print=not output_path)
     end_time = time.process_time()
 
     print(f"Policy iteration converged after {i} steps for {end_time - start_time} seconds")
