@@ -16,6 +16,9 @@ class Simulator:
         :param float alpha: Relationship between probability and fidelity F_i = 1 - alpha * p_i
         :param float gamma: Memory decay parameter
         """
+
+        max_ttl = get_ttl(np.min(actions), alpha, f_thresh, gamma)
+        assert max_ttl >= n_links, f"The maximum TTL {max_ttl} is less than the number of links required {n_links}"
         
         self.policy = policy
         self.n_links = n_links

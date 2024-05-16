@@ -22,7 +22,10 @@ class Environment:
         self.gamma = gamma
         self.alpha = alpha
         self.actions = ps
-        self.states = self.gen_states(n_links, self.get_ttl(np.min(ps)))
+
+        max_ttl = self.get_ttl(np.min(ps))
+        assert max_ttl >= n_links, f"The maximum TTL {max_ttl} is less than the number of links required {n_links}"
+        self.states = self.gen_states(n_links, max_ttl)
     
     def gen_states(self, n_links: int, max_ttl: int) -> List[State]:
         """
