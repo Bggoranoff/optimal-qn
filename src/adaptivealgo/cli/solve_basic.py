@@ -64,12 +64,11 @@ def calc_expected_time(first_p: float, second_p: float, ttl: float) -> float:
 
     assert 0 <= first_p <= 1, f"first_p={first_p}"
     assert 0 <= second_p <= 1, f"second_p={second_p}"
-    assert ttl >= 1, f"ttl={ttl}"
 
-    if first_p == 0 or second_p == 0 or ttl == 1:
+    if first_p == 0 or second_p == 0 or ttl <= 1:
         return np.inf
 
-    return (1 / first_p) + (1 / (second_p * (1 - (1 - second_p) ** (ttl - 1))))
+    return (1 / second_p) + (1 / (first_p * (1 - (1 - second_p) ** (ttl - 1))))
 
 def build_policy(max_ttl: int, et_12: float, et_22: float) -> dict:
     """
@@ -119,6 +118,9 @@ def run(f_thresh: float, p_1: float, p_2: float, alpha: float, gamma: float):
 
     et_12 = calc_expected_time(p_1, p_2, t_1)
     et_22 = calc_expected_time(p_2, p_2, t_2)
+
+    print(f"Expected time for policy 1, 2: {et_12}")
+    print(f"Expected time for policy 2, 2: {et_22}")
 
     final_policy = build_policy(t_1, et_12, et_22)
     print_policy(final_policy)

@@ -31,14 +31,14 @@ def build_argument_parser():
         "--thresh",
         dest="f_thresh",
         type=float,
-        default="0.4",
+        default="0.3",
         help="Minimum fidelity threshold (F_thresh).",
     )
     parser.add_argument(
         "--actions",
         dest="actions",
         type=str,
-        default="0.3, 0.5",
+        default="0.1, 0.7",
         help="Comma-separated list of protocol probabilities of success (e.g. 0.25, 0.5, 0.75).",
     )
     parser.add_argument(
@@ -52,7 +52,7 @@ def build_argument_parser():
         "--gamma",
         dest="gamma",
         type=float,
-        default="0.2",
+        default="0.1",
         help="Fixed parameter specifying exponential memory decay.",
     )
     parser.add_argument(

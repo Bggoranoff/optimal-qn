@@ -41,7 +41,7 @@ class Simulator:
         state = [ttl - 1 for ttl in state if ttl > 1]
         if rnd < action:
             ttl = get_ttl(action, self.alpha, self.f_thresh, self.gamma)
-            state = sorted(state + [ttl])
+            state = sorted(state + [ttl]) if ttl > 0 else sorted(state)
         
         return state
 
