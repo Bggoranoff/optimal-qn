@@ -66,7 +66,7 @@ def build_argument_parser():
         "--output",
         dest="output_path",
         type=str,
-        default="./policy.json",
+        default=None,
         help="Path to save the policy.",
     )
     return parser
@@ -227,6 +227,9 @@ def find_policy(n_links: int, f_thresh: float, ps: List[float], alpha: float, ga
     }
 
     if to_print:
+        print("Final values:")
+        for state in env.states:
+            print(f"State {state}: E[t] = {-agent.get_value(state)}")
         print_policy(agent, env)
 
     return result, i
