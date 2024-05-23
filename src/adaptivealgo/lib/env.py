@@ -96,7 +96,9 @@ class Environment:
         """
 
         fail_state = [ttl - 1 for ttl in state if ttl > 1]
-        succ_state = sorted(fail_state + [self.get_ttl(action)])
+
+        new_ttl = self.get_ttl(action)  
+        succ_state = sorted(fail_state + ([new_ttl] if new_ttl >= 0 else []))
         succ_state = [ttl for ttl in succ_state if ttl > 0] if len(succ_state) < self.n_links else succ_state
         
         return fail_state, succ_state

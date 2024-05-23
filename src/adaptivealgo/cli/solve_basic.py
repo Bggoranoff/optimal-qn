@@ -112,6 +112,8 @@ def run(f_thresh: float, p_1: float, p_2: float, alpha: float, gamma: float):
     """
     
     assert p_1 < p_2, f"p_1={p_1} >= p_2={p_2}"
+    assert 1 - alpha * p_1 >= f_thresh, f"p_1={p_1}, alpha={alpha} f_thresh={f_thresh}"
+    assert 1 - alpha * p_2 >= f_thresh, f"p_2={p_2}, alpha={alpha} f_thresh={f_thresh}"
     
     t_1 = get_ttl(p_1, alpha, f_thresh, gamma)
     t_2 = get_ttl(p_2, alpha, f_thresh, gamma)
