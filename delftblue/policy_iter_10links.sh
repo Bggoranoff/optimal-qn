@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name="policy_iter_5links"
+#SBATCH --job-name="policy_iter_10links"
 #SBATCH --time=10:10:00
 #SBATCH --ntasks=1
 #SBATCH --partition=compute-p2
