@@ -20,4 +20,4 @@ conda activate myenv
 
 srun poetry run policyIter --links 6 --thresh 0.4 --actions "0.1, 0.2, 0.3, 0.4, 0.5" --alpha 1.0 --gamma 0.1 --tol 1e-6
 
-conda deactivat
+conda deactivate
