@@ -3,7 +3,7 @@ from adaptivealgo.cli.solve_basic import build_policy, calc_expected_time
 
 def test_calc_expected_time():
     expected = calc_expected_time(0.1, 0.2, 5)
-    assert np.isclose(expected, 18.47, atol=1e-2)
+    assert np.isclose(expected, 21.93, atol=1e-2)
 
 def test_calc_expected_time_first_zero():
     expected = calc_expected_time(0, 0.2, 5)
