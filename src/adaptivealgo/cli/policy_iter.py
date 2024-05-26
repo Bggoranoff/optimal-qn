@@ -3,6 +3,7 @@ import json
 from typing import List
 import numpy as np
 import time
+import wandb
 
 from adaptivealgo.cli import cli_main
 from adaptivealgo.lib.agent import Agent
@@ -247,14 +248,31 @@ def run(n_links: int, f_thresh: float, actions: str, alpha: float, gamma: float,
 
     ps = [float(p) for p in actions.replace(" ", "").split(",")]
 
+    wandb.init(
+        project="adaptive-algorithms",
+        config={
+            "n_links": n_links,
+            "f_thresh": f_thresh,
+            "actions": ps,
+            "alpha": alpha,
+            "gamma": gamma,
+            "tol": tol,
+        }
+    )
+    
     start_time = time.process_time()
     policy, i = find_policy(n_links, f_thresh, ps, alpha, gamma, tol, to_print=not output_path)
     end_time = time.process_time()
+
+    wandb.log({"policy_iterations": i, "time": end_time - start_time})
+    wandb.finish()
 
     print(f"Policy iteration converged after {i} steps for {end_time - start_time} seconds")
     if output_path:
         with open(output_path, "w") as file:
             json.dump(policy, file)
+    else:
+        print(json.dumps(policy, indent=4))
 
 def main():
     cli_main(build_argument_parser, run)
