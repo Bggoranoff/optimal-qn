@@ -22,3 +22,22 @@ def get_ttl(p_i: float, alpha: float, f_thresh: float, gamma: float) -> int:
         return np.inf
 
     return int(np.floor(np.log((1 - alpha * p_i - F_MIN) / (f_thresh - F_MIN)) / gamma))
+
+def trim_state(state: list[int], n_links: int) -> list[int]:
+    """
+    Remove the links that will never survive for the given number of links
+    required in memory
+
+    :param list[int] state: The state
+    :param int n_links: The number of links required
+    :returns list[int]: The trimmed state
+    """
+
+    prev_state = state
+    state = [ttl for ttl in state if ttl >= n_links - len(state)]
+
+    while len(prev_state) != len(state):
+        prev_state = state
+        state = [ttl for ttl in state if ttl >= n_links - len(state)]
+
+    return state
