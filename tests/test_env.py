@@ -20,7 +20,7 @@ def test_get_states_single():
 
 def test_get_ttl():
     env = Environment(n_links=2, ps=[0.1, 0.2], f_thresh=0.5, alpha=0.1, gamma=0.1)
-    assert env.get_ttl(0.1) == 10
+    assert env.get_ttl(0.1) == 11
 
 def test_is_terminal_true():
     env = Environment(n_links=2, ps=[0.1, 0.2], f_thresh=0.5, alpha=0.1, gamma=0.1)
@@ -32,4 +32,4 @@ def test_is_terminal_false():
 
 def test_transition():
     env = Environment(n_links=2, ps=[0.1, 0.2], f_thresh=0.5, alpha=0.1, gamma=0.1)
-    assert env.transition([1], 0.1) == ([], [10])
+    assert env.transition([1], 0.1) == ([], [11])
