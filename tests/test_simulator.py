@@ -14,4 +14,4 @@ def test_get_next_state():
     state = [2]
     action = 0.2
     next_state = simulator.get_next_state(state, action)
-    assert next_state == [1] or next_state == [1, 11]
+    assert next_state == [1] or next_state == [1, 12]
