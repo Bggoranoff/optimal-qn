@@ -21,7 +21,7 @@ def get_ttl(p_i: float, alpha: float, f_thresh: float, gamma: float) -> int:
     if f_thresh == F_MIN:
         return np.inf
 
-    return int(np.ceil(np.log((1 - alpha * p_i - F_MIN) / (f_thresh - F_MIN)) / gamma))
+    return int(np.floor(np.log((1 - alpha * p_i - F_MIN) / (f_thresh - F_MIN)) / gamma) + 1)
 
 def trim_state(state: list[int], n_links: int) -> list[int]:
     """
