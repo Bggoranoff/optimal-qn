@@ -99,6 +99,6 @@ class Environment:
 
         new_ttl = self.get_ttl(action)  
         succ_state = sorted(fail_state + ([new_ttl] if new_ttl >= 0 else []))
-        succ_state = [ttl for ttl in succ_state if ttl > 0] if len(succ_state) < self.n_links else succ_state
+        succ_state = [ttl for ttl in succ_state if ttl > 0]
         
         return fail_state, succ_state

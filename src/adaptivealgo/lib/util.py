@@ -15,13 +15,16 @@ def get_ttl(p_i: float, alpha: float, f_thresh: float, gamma: float) -> int:
     """
 
     assert 0 <= p_i <= 1, f"p_i={p_i}"
-    assert 1 - alpha * p_i >= F_MIN, f"p_i={p_i}, alpha={alpha}, F_MIN={F_MIN}"
+    # assert 1 - alpha * p_i >= F_MIN, f"p_i={p_i}, alpha={alpha}, F_MIN={F_MIN}"
     assert f_thresh >= F_MIN, f"f_thresh={f_thresh}, F_MIN={F_MIN}"
 
     if f_thresh == F_MIN:
         return np.inf
+    
+    if 1 - alpha * p_i < F_MIN:
+        return 0
 
-    return int(np.floor(np.log((1 - alpha * p_i - F_MIN) / (f_thresh - F_MIN)) / gamma) + 1)
+    return int(np.floor(np.log((1 - alpha * p_i - F_MIN) / (f_thresh - F_MIN)) / gamma))
 
 def trim_state(state: list[int], n_links: int) -> list[int]:
     """
