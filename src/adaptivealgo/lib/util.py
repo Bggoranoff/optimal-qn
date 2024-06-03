@@ -37,10 +37,10 @@ def trim_state(state: list[int], n_links: int) -> list[int]:
     """
 
     prev_state = state
-    state = [ttl for ttl in state if ttl >= n_links - len(state)]
+    state = [ttl for ttl in state if ttl > n_links - len(state)]
 
     while len(prev_state) != len(state):
         prev_state = state
-        state = [ttl for ttl in state if ttl >= n_links - len(state)]
+        state = [ttl for ttl in state if ttl > n_links - len(state)]
 
     return state

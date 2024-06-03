@@ -7,7 +7,7 @@ def test_calc_value():
     agent = Agent(2, 2)
 
     agent.set_value([], 1)
-    agent.set_value([11], 3)
+    agent.set_value([10], 3)
 
     state = [1]
     action = 0.1
@@ -18,7 +18,7 @@ def test_update_bellman():
     agent = Agent(2, 2)
 
     agent.set_value([], 1)
-    agent.set_value([11], 3)
+    agent.set_value([10], 3)
 
     s_idx = 1
     update_bellman(env, agent, s_idx)

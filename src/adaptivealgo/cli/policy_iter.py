@@ -108,6 +108,9 @@ def update_policy(env: Environment, agent: Agent, s_idx: int):
 
     for a_idx in range(agent.n_actions):
         action = env.actions[a_idx]
+        if env.get_ttl(action) < env.n_links - len(state):
+            continue
+
         value = calc_value(env, agent, state, action)
 
         best_action = a_idx if value > best_value else best_action
@@ -167,6 +170,9 @@ def update_bellman(env: Environment, agent: Agent, s_idx: int):
 
     for a_idx in range(agent.n_actions):
         action = env.actions[a_idx]
+        if env.get_ttl(action) < env.n_links - len(state):
+            continue
+
         prob = agent.get_policy(state)[a_idx]
         value += prob * calc_value(env, agent, state, action)
 
