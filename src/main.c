@@ -1,6 +1,5 @@
-#include <stdio.h>
+#include "cli.h"
 
 int main(int argc, char *argv[]) {
-    printf("Hello World!\n");
-    return 0;
+    return cli_main(argc, argv);
 }
