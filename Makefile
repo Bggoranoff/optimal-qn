@@ -5,3 +5,4 @@ compile:
 
 clean:
 	rm -rf build
+	rm -f OptimalNearTerm

@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(OptimalNearTerm)
+project(OptimalNearTerm C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
-file(GLOB_RECURSE SRC_FILES "src/*.c")
+file(GLOB_RECURSE SRC_FILES src/*.c)
+
+message("Source files collected: ${SRC_FILES}")
 
 add_executable(OptimalNearTerm ${SRC_FILES})
 
