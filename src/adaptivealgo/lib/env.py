@@ -22,6 +22,7 @@ class Environment:
         self.gamma = gamma
         self.alpha = alpha
         self.actions = ps
+        self.transition_map = {}
 
         max_ttl = self.get_ttl(np.min(ps))
         assert max_ttl >= n_links, f"The maximum TTL {max_ttl} is less than the number of links required {n_links}"
@@ -95,10 +96,17 @@ class Environment:
         :returns State, State: The fail state and success state
         """
 
+        if str(state) in self.transition_map and action in self.transition_map[str(state)]:
+            return self.transition_map[str(state)][action]
+
         fail_state = [ttl - 1 for ttl in state if ttl > 1]
 
-        new_ttl = self.get_ttl(action)  
+        new_ttl = self.get_ttl(action)
         succ_state = sorted(fail_state + ([new_ttl] if new_ttl >= 0 else []))
         succ_state = [ttl for ttl in succ_state if ttl > 0]
+        
+        if str(state) not in self.transition_map:
+            self.transition_map[str(state)] = {}
+        self.transition_map[str(state)][action] = (fail_state, succ_state)
         
         return fail_state, succ_state
