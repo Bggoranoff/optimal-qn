@@ -114,3 +114,11 @@ int* transition_succ(Environment *env, int m_links, int *state, float action) {
 
     return new_state;
 }
+
+int count_states(Environment *env) {
+    int result = 0;
+    for (int i = 0; i < env->n_links + 1; i++) {
+        result += env->st_per_lev[i];
+    }
+    return result;
+}

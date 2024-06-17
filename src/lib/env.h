@@ -49,4 +49,6 @@ int* transition_fail(int m_links, int *state);
 
 int* transition_succ(Environment *env, int m_links, int *state, float action);
 
+int count_states(Environment *env);
+
 #endif
