@@ -45,8 +45,8 @@ Environment *create_env(const AdaptiveProtocolSystem *sys);
 
 int get_ttl_env(const Environment *env, float p_i);
 
-int* transition_fail(int m_links, int *state, float action);
+int* transition_fail(int m_links, int *state);
 
-int* transition_succ(int m_links, int *state, float action);
+int* transition_succ(Environment *env, int m_links, int *state, float action);
 
 #endif

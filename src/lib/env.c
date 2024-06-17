@@ -77,3 +77,40 @@ Environment *create_env(const AdaptiveProtocolSystem *sys) {
 int get_ttl_env(const Environment *env, float p_i) {
     return get_ttl(p_i, env->alpha, env->f_thresh, env->gamma);
 }
+
+int* transition_fail(int m_links, int *state) {
+    int *new_state = (int*) calloc(m_links, sizeof(int));
+    int ni = 0;
+
+    for (int i = 0; i < m_links; i++) {
+        if (state[i] - 1 == 0) {
+            continue;
+        }
+
+        new_state[ni++] = state[i] - 1;
+    }
+
+    return new_state;
+}
+
+int* transition_succ(Environment *env, int m_links, int *state, float action) {
+    int new_ttl = get_ttl_env(env, action);
+    int *new_state = (int*) calloc(m_links + 1, sizeof(int));
+    int ni = 0;
+    bool included = false;
+
+    for (int i = 0; i < m_links; i++) {
+        if (state[i] - 1 == 0) {
+            continue;
+        }
+
+        if (new_ttl <= state[i] - 1 && !included) {
+            new_state[ni++] = new_ttl;
+            included = true;
+        }
+
+        new_state[ni++] = state[i] - 1;
+    }
+
+    return new_state;
+}
