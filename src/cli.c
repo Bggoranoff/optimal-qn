@@ -41,7 +41,7 @@ int cli_main(int argc, char *argv[]) {
             .tol = tol,
         };
 
-        return policy_iter(sys);
+        return policy_iter(&sys);
     } else if (strcmp(argv[1], "simulatePolicy") == 0) {
         return simulate_policy();
     } else if (strcmp(argv[1], "solveBasic") == 0) {
@@ -58,7 +58,7 @@ int cli_main(int argc, char *argv[]) {
             .gamma = atof(argv[6]),
         };
 
-        return solve_basic(sys);
+        return solve_basic(&sys);
     }
 
     printf("Unknown command: %s\n", argv[1]);

@@ -1,6 +1,7 @@
 compile:
 	cmake . -B build
 	$(MAKE) -C build/
+	rm -f ./OptimalNearTerm
 	ln -s build/OptimalNearTerm ./OptimalNearTerm
 
 clean:

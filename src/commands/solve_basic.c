@@ -17,18 +17,18 @@ float calc_et(float p_1, float p_2, float t_1) {
     return 1.0f / p_2 + 1.0f / (p_1 * p_fail);
 }
 
-int solve_basic(TwoProtocolSystem sys) {
+int solve_basic(const TwoProtocolSystem *sys) {
     printf("Calling solve_basic...\n");
 
-    assert(sys.p_1 < sys.p_2);
-    assert(1 - sys.alpha * sys.p_1 >= sys.f_thresh);
-    assert(1 - sys.alpha * sys.p_2 >= sys.f_thresh);
+    assert(sys->p_1 < sys->p_2);
+    assert(1 - sys->alpha * sys->p_1 >= sys->f_thresh);
+    assert(1 - sys->alpha * sys->p_2 >= sys->f_thresh);
 
-    int t_1 = get_ttl(sys.p_1, sys.alpha, sys.f_thresh, sys.gamma);
-    int t_2 = get_ttl(sys.p_2, sys.alpha, sys.f_thresh, sys.gamma);
+    int t_1 = get_ttl(sys->p_1, sys->alpha, sys->f_thresh, sys->gamma);
+    int t_2 = get_ttl(sys->p_2, sys->alpha, sys->f_thresh, sys->gamma);
 
-    float et_12 = calc_et(sys.p_1, sys.p_2, t_1);
-    float et_22 = calc_et(sys.p_2, sys.p_2, t_2);
+    float et_12 = calc_et(sys->p_1, sys->p_2, t_1);
+    float et_22 = calc_et(sys->p_2, sys->p_2, t_2);
 
     printf("Protocol: (%d, %d)\n", et_12 < et_22 ? 1 : 2, 2);
     return 0;
