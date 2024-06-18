@@ -26,7 +26,7 @@ HashMap* create_hashmap(size_t key_space) {
 }
 
 void insert_data(HashMap* hm, const char* key, float data) {
-    if(hm == NULL || key == NULL || hm->size == 0) {
+    if (hm == NULL || key == NULL || hm->size == 0) {
         return;
     }
 
@@ -36,7 +36,7 @@ void insert_data(HashMap* hm, const char* key, float data) {
     node->key = calloc(strlen(key) + 1, sizeof(char));
     strcpy(node->key, key);
 
-    node->value = (uint64_t) data;
+    node->value = data;
     node->next = NULL;
 
     if(hm->data[hashed_key] == NULL) {
@@ -49,7 +49,7 @@ void insert_data(HashMap* hm, const char* key, float data) {
 
     while(current != NULL) {
         if(strcmp(current->key, key) == 0) {
-            current->value = (uint64_t) data;
+            current->value = data;
             free(node->key);
             free(node);
             return;
@@ -63,15 +63,15 @@ void insert_data(HashMap* hm, const char* key, float data) {
 }
 
 float get_data(HashMap* hm, const char* key) {
-    if(hm == NULL || key == NULL || hm->size == 0) {
+    if (hm == NULL || key == NULL || hm->size == 0) {
         return 0.0f;
     }
 
     unsigned int hashed_key = hash(key) % hm->size;
 
     Node* current = hm->data[hashed_key];
-    while(current != NULL) {
-        if(strcmp(current->key, key) == 0) {
+    while (current != NULL) {
+        if (strcmp(current->key, key) == 0) {
             return current->value;
         }
 
@@ -82,7 +82,7 @@ float get_data(HashMap* hm, const char* key) {
 }
 
 void remove_data(HashMap* hm, const char* key) {
-    if(hm == NULL || key == NULL || hm->size == 0) {
+    if (hm == NULL || key == NULL || hm->size == 0) {
         return;
     }
 
@@ -91,9 +91,9 @@ void remove_data(HashMap* hm, const char* key) {
     Node* current = hm->data[hashed_key];
     Node* prev = NULL;
 
-    while(current != NULL) {
-        if(strcmp(current->key, key) == 0) {
-            if(prev == NULL) {
+    while (current != NULL) {
+        if (strcmp(current->key, key) == 0) {
+            if (prev == NULL) {
                 hm->data[hashed_key] = current->next;
                 free(current);
             } else {
@@ -110,17 +110,17 @@ void remove_data(HashMap* hm, const char* key) {
 }
 
 void delete_hashmap(HashMap* hm) {
-    if(hm == NULL) {
+    if (hm == NULL) {
         return;
     }
 
     for(uint64_t i = 0; i < hm->size; i++) {
-        if(hm->data[i] == NULL) {
+        if (hm->data[i] == NULL) {
             continue;
         }
 
         Node* current = hm->data[i];
-        while(current != NULL) {
+        while (current != NULL) {
             Node* tmp = current;
             current = current->next;
 

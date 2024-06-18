@@ -25,6 +25,7 @@ char* to_string(int m_links, int *state) {
 
     char *ptr = result;
     *ptr++ = '[';
+
     for (int i = 0; i < m_links; i++) {
         if (i > 0) {
             *ptr++ = ',';
@@ -32,6 +33,7 @@ char* to_string(int m_links, int *state) {
         }
         ptr += sprintf(ptr, "%d", state[i]);
     }
+
     *ptr++ = ']';
     *ptr = '\0';
 

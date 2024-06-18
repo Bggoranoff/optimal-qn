@@ -26,5 +26,8 @@ int policy_iter(const AdaptiveProtocolSystem *sys) {
 
     set_policy(agent, 2, state, 0.4);
     printf("P({1, 2}) = %f\n", get_policy(agent, 2, state));
+
+    int another_state[] = {1, 2, 3};
+    printf("P({1, 2, 3}) = %f\n", get_policy(agent, 3, another_state));
     return 0;
 }
