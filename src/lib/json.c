@@ -15,7 +15,7 @@ void serialise_hashmap(HashMap* map, char* json) {
         
         while (node != NULL) {
             if (!first) {
-                strcat(json, ",");
+                strcat(json, ", ");
             }
 
             char buffer[BUF_SIZE];
@@ -76,3 +76,19 @@ void deserialise_hashmap(const char* json, HashMap* map) {
     }
 }
 
+void serialise_system(const char *policy, const char *values, const char *params, char *json) {
+    strcpy(json, "{\n");
+
+    strcat(json, "    \"params\": ");
+    strcat(json, params);
+    strcat(json, ",\n");
+
+    strcat(json, "    \"values\": ");
+    strcat(json, values);
+    strcat(json, ",\n");
+
+    strcat(json, "    \"policy\": ");
+    strcat(json, policy);
+
+    strcat(json, "\n}");
+}

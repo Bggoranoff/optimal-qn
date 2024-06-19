@@ -43,6 +43,7 @@ Environment *create_env(const AdaptiveProtocolSystem *sys) {
     result->alpha = sys->alpha;
     result->gamma = sys->gamma;
     result->actions = sys->actions;
+    result->f_thresh = sys->f_thresh;
     result->st_per_lev = (int*) malloc((sys->n_links + 1) * sizeof(int));
 
     float min_action = find_min_action(sys->n_actions, sys->actions);
@@ -110,6 +111,10 @@ int* transition_succ(Environment *env, int m_links, int *state, float action) {
         }
 
         new_state[ni++] = state[i] - 1;
+    }
+
+    if (!included) {
+        new_state[ni] = new_ttl;
     }
 
     return new_state;
