@@ -26,5 +26,7 @@ bool improve_policy(Environment *env, Agent *agent);
 
 void output_policy(Environment *env, Agent *agent, const char *output_path);
 
+void adx_store_data(const char *filepath, const char *data);
+
 #endif
 

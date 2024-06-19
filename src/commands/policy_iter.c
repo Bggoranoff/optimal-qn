@@ -128,11 +128,21 @@ void output_policy(Environment *env, Agent *agent, const char *output_path) {
 
     if (output_path == NULL) {
         printf("%s\n", output_json);
+    } else {
+        adx_store_data(output_path, output_json);
     }
 
     free(value_json);
     free(policy_json);
     free(params_json);
+}
+
+void adx_store_data(const char *filepath, const char *data) {
+    FILE *fp = fopen(filepath, "ab");
+    if (fp != NULL) {
+        fputs(data, fp);
+        fclose(fp);
+    }
 }
 
 int policy_iter(const AdaptiveProtocolSystem *sys) {
@@ -153,6 +163,6 @@ int policy_iter(const AdaptiveProtocolSystem *sys) {
     clock_t end = clock();
     printf("Policy iteration complete within %d iterations!\n", iter);
     printf("Policy iteration took %.5f seconds!\n", ((float) end - start) / CLOCKS_PER_SEC);
-    output_policy(env, agent, NULL);
+    output_policy(env, agent, "./output.json");
     return 0;
 }
