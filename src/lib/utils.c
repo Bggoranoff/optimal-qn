@@ -18,3 +18,13 @@ int get_ttl(float p_i, float alpha, float f_thresh, float gamma) {
 
     return floorf(logf((f_i - F_MIN) / (f_thresh - F_MIN)) / gamma);
 }
+
+long factorial(int n) {
+    long result = 1;
+
+    for (int i = 1; i <= n; i++) {
+        result *= i;
+    }
+
+    return result;
+}

@@ -7,10 +7,10 @@
 #include "env.h"
 
 int count_level_states(int m_links, int max_ttl) {
-    int num = tgamma(max_ttl + m_links);
-    int denom = tgamma(m_links + 1) * tgamma(max_ttl);
+    long num = tgamma(max_ttl + m_links);
+    long denom = tgamma(m_links + 1) * tgamma(max_ttl);
 
-    return num / denom;
+    return (int) (num / denom);
 }
 
 void gen_states(int min_ttl, int max_ttl, LevelInfo *info, int *cur_state, int next_link) {
