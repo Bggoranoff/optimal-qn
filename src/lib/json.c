@@ -15,11 +15,11 @@ void serialise_hashmap(HashMap* map, char* json) {
         
         while (node != NULL) {
             if (!first) {
-                strcat(json, ", ");
+                strcat(json, ",\n");
             }
 
             char buffer[BUF_SIZE];
-            snprintf(buffer, sizeof(buffer), "\"%s\": %f", node->key, node->value);
+            snprintf(buffer, sizeof(buffer), "\t\"%s\": %f", node->key, node->value);
             strcat(json, buffer);
 
             node = node->next;
@@ -27,7 +27,7 @@ void serialise_hashmap(HashMap* map, char* json) {
         }
     }
 
-    strcat(json, "}");
+    strcat(json, " }");
 }
 
 void serialise_system(const char *policy, const char *values, const char *params, char *json) {
