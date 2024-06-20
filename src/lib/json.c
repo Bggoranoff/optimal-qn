@@ -30,52 +30,6 @@ void serialise_hashmap(HashMap* map, char* json) {
     strcat(json, "}");
 }
 
-void deserialise_hashmap(const char* json, HashMap* map) {
-    char key[BUF_SIZE];
-    float value;
-
-    const char* ptr = json;
-
-    while (*ptr != '{' && *ptr != '\0') {
-        ptr += 1;
-    }
-
-    while (*ptr != '\0' && *ptr != '}') {
-        ptr += 1;
-
-        while (*ptr == ' ' || *ptr == '\n' || *ptr == '\t') {
-            ptr += 1;
-        }
-        
-        if (*ptr == '\"') {
-            ptr += 1;
-            char* key_start = (char*) ptr;
-
-            while (*ptr != '\"') {
-                ptr += 1;
-            }
-
-            strncpy(key, key_start, ptr - key_start);
-            key[ptr - key_start] = '\0';
-            ptr += 1;
-        }
-
-        while (*ptr != ':' && *ptr != '\0') {
-            ptr += 1;
-        }
-
-        if (*ptr == ':') {
-            ptr += 1;
-            sscanf(ptr, "%f", &value);
-            insert_data(map, key, value);
-        }
-
-        while (*ptr != ',' && *ptr != '}' && *ptr != '\0') {
-            ptr += 1;
-        }
-    }
-}
-
 void serialise_system(const char *policy, const char *values, const char *params, char *json) {
     strcpy(json, "{\n");
 

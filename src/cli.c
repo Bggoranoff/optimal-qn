@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include "cli.h"
 #include "commands/policy_iter.h"
-#include "commands/simulate_policy.h"
 #include "commands/solve_basic.h"
 
 int cli_main(int argc, char *argv[]) {
@@ -42,8 +41,6 @@ int cli_main(int argc, char *argv[]) {
         };
 
         return policy_iter(&sys);
-    } else if (strcmp(argv[1], "simulatePolicy") == 0) {
-        return simulate_policy();
     } else if (strcmp(argv[1], "solveBasic") == 0) {
         if (argc < 7) {
             printf("Required number of arguments for solveBasic is 5\n");
