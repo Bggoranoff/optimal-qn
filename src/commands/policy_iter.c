@@ -138,7 +138,7 @@ void output_policy(Environment *env, Agent *agent, const char *output_path) {
 }
 
 void adx_store_data(const char *filepath, const char *data) {
-    FILE *fp = fopen(filepath, "ab");
+    FILE *fp = fopen(filepath, "w");
     if (fp != NULL) {
         fputs(data, fp);
         fclose(fp);
