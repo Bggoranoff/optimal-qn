@@ -145,7 +145,7 @@ void adx_store_data(const char *filepath, const char *data) {
     }
 }
 
-int policy_iter(const AdaptiveProtocolSystem *sys) {
+int policy_iter(const AdaptiveProtocolSystem *sys, const char* output_path) {
     Environment *env = create_env(sys);
     int n_states = count_states(env);
     Agent *agent = create_agent(n_states, sys->n_actions);
@@ -163,6 +163,6 @@ int policy_iter(const AdaptiveProtocolSystem *sys) {
     clock_t end = clock();
     printf("Policy iteration complete within %d iterations!\n", iter);
     printf("Policy iteration took %.5f seconds!\n", ((float) end - start) / CLOCKS_PER_SEC);
-    output_policy(env, agent, "./output.json");
+    output_policy(env, agent, output_path);
     return 0;
 }

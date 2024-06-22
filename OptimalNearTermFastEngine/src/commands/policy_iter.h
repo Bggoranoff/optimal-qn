@@ -10,7 +10,7 @@ static const float DEFAULT_VALUE = -FLT_MAX + 1;
 
 static const int PARAMS_SIZE = 5;
 
-int policy_iter(const AdaptiveProtocolSystem *sys);
+int policy_iter(const AdaptiveProtocolSystem *sys, const char *output_path);
 
 int calc_m_links(int *state, int max_links);
 

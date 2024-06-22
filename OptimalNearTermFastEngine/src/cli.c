@@ -30,6 +30,11 @@ int cli_main(int argc, char *argv[]) {
         float gamma = atof(argv[6]);
         float tol = atof(argv[7]);
 
+        char *output_path = NULL;
+        if (argc > 8) {
+            output_path = argv[8];
+        }
+
         AdaptiveProtocolSystem sys = {
             .n_links = n_links,
             .n_actions = n_actions,
@@ -40,8 +45,10 @@ int cli_main(int argc, char *argv[]) {
             .tol = tol,
         };
 
-        return policy_iter(&sys);
-    } else if (strcmp(argv[1], "solveBasic") == 0) {
+        return policy_iter(&sys, output_path);
+    }
+
+    if (strcmp(argv[1], "solveBasic") == 0) {
         if (argc < 7) {
             printf("Required number of arguments for solveBasic is 5\n");
             return 1;
