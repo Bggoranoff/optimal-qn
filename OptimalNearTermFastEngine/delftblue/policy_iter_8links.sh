@@ -11,6 +11,9 @@
 #SBATCH --output=/home/%u/OptimalNearTerm/delftblue/logs/%x_%j.out
 #SBATCH --error=/home/%u/OptimalNearTerm/delftblue/logs/%x_%j.err
 
+module load 2023r1
+module load cmake
+
 make clean
 make compile
 ./OptimalNearTerm policyIter 8 0.5 "0.1, 0.2, 0.3, 0.4" 1.0 0.1 1e-20
