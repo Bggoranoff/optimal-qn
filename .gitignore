@@ -4,3 +4,10 @@ build/
 .cache/
 .vscode/
 .idea/
+/.venv
+/.vscode
+/.idea
+/.metals
+*.txt
+/.pytest_cache
+/wandb
